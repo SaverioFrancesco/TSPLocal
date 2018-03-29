@@ -15,6 +15,8 @@ public:
   unsigned& operator[](unsigned i) { return positions[i]; }
   
   TSP_Input const &getInput() const{ return in;} 
+  void set_positions(unsigned i, unsigned j){positions[i]=j;}
+  unsigned const get_positions(unsigned i)const{return positions[i];}
 
 protected:
   const TSP_Input & in;  

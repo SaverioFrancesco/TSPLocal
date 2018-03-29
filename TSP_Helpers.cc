@@ -70,16 +70,22 @@ bool TSP_StateManager::CheckConsistency(const TSP_State& st) const
  * Output Manager Methods
  *****************************************************************************/
 
-void TSP_OutputManager::InputState(TSP_State& st, const TSP_Output& TSP) const 
+void TSP_OutputManager::InputState(TSP_State& st, const TSP_Output& out) const 
 {
-  // Insert the code that "translates" an output object to a state object
-	throw logic_error("TSP_OutputManager::InputState not implemented yet");	
+  
+  
+  //adjacencyMatrix.resize(num_nodes);
+
+  for (unsigned s = 0; s < st.getInput().get_num_nodes(); s++)
+    st.set_positions(s, out.get_tcp_path(s));
+
 }
 
-void TSP_OutputManager::OutputState(const TSP_State& st, TSP_Output& TSP) const 
+void TSP_OutputManager::OutputState(const TSP_State& st, TSP_Output& out) const 
 {
-  // Insert the code that "translates" a state object to an output object
-	throw logic_error("TSP_OutputManager::OutputState not implemented yet");	
+  unsigned i;
+  for (i = 0; i < st.getInput().get_num_nodes(); i++)
+      out.set_tcp_path(i,st.get_positions(i));
 }
 
 
