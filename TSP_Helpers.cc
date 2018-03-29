@@ -143,12 +143,7 @@ bool TSP_SwapNeighborhoodExplorer::NextMove(const TSP_State& st, TSP_Swap& sw) c
 
 void TSP_SwapDeltaCostComponent1::PrintViolations(const TSP_State& st, ostream& os) const
 {
-  unsigned i, j;
-  for (i = 0; i < st.getInput().get_num_nodes() - 1; i++)
-    for (j = i + 1; j < st.getInput().get_num_nodes(); j++)
-      if (static_cast<int>(j - i) == abs(static_cast<int>(st[i]) - static_cast<int>(st[j])))
-      os << "Queens in position (" << i << "," << st[i] << ") and (" 
-         << j << "," << st[j] << ") attack each other" << endl;
+ 
 }
           
 int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP_Swap& sw) const
@@ -157,20 +152,10 @@ int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP
   // Insert the code that computes the delta cost of component 1 for move mv in state st
 	unsigned i;
   int delta_violations = 0;
-  for (i = 0; i < st.getInput().get_num_nodes(); i++)
+  for (i = 0; i < st.getInput().get_num_nodes()-1; i++)
     {
-      if (i != sw.p1 && i != sw.p2)
-    {
-      int ii = static_cast<int>(i), p1 = static_cast<int>(sw.p1), p2 = static_cast<int>(sw.p2);
-      if (abs(ii - p1) == abs(static_cast<int>(st[i]) - static_cast<int>(st[p1])))
-        delta_violations--;
-      if (abs(ii - p2) == abs(static_cast<int>(st[i]) - static_cast<int>(st[p2])))
-        delta_violations--;
-      if (abs(ii - p1) == abs(static_cast<int>(st[i]) - static_cast<int>(st[p2])))
-        delta_violations++;
-      if (abs(ii - p2) == abs(static_cast<int>(st[i]) - static_cast<int>(st[p1])))
-        delta_violations++;
-       }
+       delta_violations+= st.getInput().get_arc_cost(st[i], st[i+1]);
+
    }
   return delta_violations;
 }
