@@ -35,12 +35,12 @@ int main(int argc, const char* argv[])
   TSP_CostComponent1 cc1(in, 1, true);
   //TSP_CostComponent2 cc2(in, 1, true);
  
-  TSP_MoveDeltaCostComponent1 dcc1(in, cc1);
-  //TSP_MoveDeltaCostComponent2 dcc2(in, cc2);
+  TSP_SwapDeltaCostComponent1 dcc1(in, cc1);
+  //TSP_SwapDeltaCostComponent2 dcc2(in, cc2);
 
   // helpers
   TSP_StateManager TSP_sm(in);
-  TSP_MoveNeighborhoodExplorer TSP_nhe(in, TSP_sm);
+  TSP_SwapNeighborhoodExplorer TSP_nhe(in, TSP_sm);
 
   TSP_OutputManager TSP_om(in);
   
@@ -53,13 +53,13 @@ int main(int argc, const char* argv[])
   //TSP_nhe.AddDeltaCostComponent(dcc2);
   
   // runners
-  HillClimbing<TSP_Input, TSP_State, TSP_Move> TSP_hc(in, TSP_sm, TSP_nhe, "TSP_MoveHillClimbing");
-  SteepestDescent<TSP_Input, TSP_State, TSP_Move> TSP_sd(in, TSP_sm, TSP_nhe, "TSP_MoveSteepestDescent");
-  SimulatedAnnealing<TSP_Input, TSP_State, TSP_Move> TSP_sa(in, TSP_sm, TSP_nhe, "TSP_MoveSimulatedAnnealing");
+  HillClimbing<TSP_Input, TSP_State, TSP_Swap> TSP_hc(in, TSP_sm, TSP_nhe, "TSP_SwapHillClimbing");
+  SteepestDescent<TSP_Input, TSP_State, TSP_Swap> TSP_sd(in, TSP_sm, TSP_nhe, "TSP_SwapSteepestDescent");
+  SimulatedAnnealing<TSP_Input, TSP_State, TSP_Swap> TSP_sa(in, TSP_sm, TSP_nhe, "TSP_SwapSimulatedAnnealing");
 
   // tester
   Tester<TSP_Input, TSP_Output, TSP_State> tester(in,TSP_sm,TSP_om);
-  MoveTester<TSP_Input, TSP_Output, TSP_State, TSP_Move> swap_move_test(in,TSP_sm,TSP_om,TSP_nhe, "TSP_Move move", tester); 
+  MoveTester<TSP_Input, TSP_Output, TSP_State, TSP_Swap> swap_move_test(in,TSP_sm,TSP_om,TSP_nhe, "TSP_Swap move", tester); 
 
   SimpleLocalSearch<TSP_Input, TSP_Output, TSP_State> TSP_solver(in, TSP_sm, TSP_om, "TSP solver");
   if (!CommandLineParameters::Parse(argc, argv, true, false))

@@ -29,7 +29,7 @@ class TSP_Swap
   friend ostream& operator<<(ostream& os, const TSP_Swap& c);
   friend istream& operator>>(istream& is, TSP_Swap& c);
  public:
-  TSP_Swap(unsigned pos1, unsigned pos2);
+  TSP_Swap(unsigned pos1 = 0, unsigned pos2 = 0);
   unsigned p1, p2;
 };
 #endif
