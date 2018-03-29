@@ -24,6 +24,7 @@ int main(int argc, const char* argv[])
       cout << "Error: --main::instance filename option must always be set" << endl;
       return 1;
     }
+ 
   TSP_Input in(instance);
 
   cout << in;
@@ -34,7 +35,7 @@ int main(int argc, const char* argv[])
   // cost components: second parameter is the cost, third is the type (true -> hard, false -> soft)
   TSP_CostComponent1 cc1(in, 1, true);
   //TSP_CostComponent2 cc2(in, 1, true);
- 
+
   TSP_SwapDeltaCostComponent1 dcc1(in, cc1);
   //TSP_SwapDeltaCostComponent2 dcc2(in, cc2);
 
@@ -105,5 +106,7 @@ int main(int argc, const char* argv[])
 					cout << "Time: " << result.running_time << "s " << endl;					
         }
    }
+
+   
   return 0;
 }

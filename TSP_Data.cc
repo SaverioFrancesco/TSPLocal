@@ -18,6 +18,7 @@ TSP_Input::TSP_Input(string file_name)
 
   for (unsigned s = 0; s < num_nodes; s++)
   {
+    adjacencyMatrix[s].resize(num_nodes);
     for (unsigned k = 0; k < num_nodes; k++)
       is>> adjacencyMatrix[s][k];   
   }
@@ -34,7 +35,8 @@ ostream& operator<<(ostream& os, const TSP_Input& pa)
   for (unsigned s = 0; s < u; s++)
   {
     for (unsigned k = 0; k < u; k++)
-      os<< pa.get_arc_cost(s,k);
+      os<< pa.get_arc_cost(s,k) << ", ";
+    os << endl;
   }
 
 

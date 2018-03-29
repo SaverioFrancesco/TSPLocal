@@ -7,7 +7,7 @@ TSP_State::TSP_State(const TSP_Input &my_in)
   // Insert the code that initialized the data structure of the
   // state object based on the input object	
 
-
+  positions.resize(my_in.get_num_nodes());
 
 }
 
