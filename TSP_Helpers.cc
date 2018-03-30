@@ -170,7 +170,7 @@ void TSP_SwapDeltaCostComponent1::PrintViolations(const TSP_State& st, ostream& 
     for (unsigned i = 0; i < st.getInput().get_num_nodes()-1; i++)
     {
        if(st.getInput().get_arc_cost(st[i], st[i+1])){
-          cout<< "Path traversing missing arch ==> (" <<st[i] << ", " << st[i+1] <<")\n";
+          os<< "Path traversing missing arch ==> (" <<st[i] << ", " << st[i+1] <<")" << endl;
        }
     }
 }
