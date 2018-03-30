@@ -172,16 +172,59 @@ void TSP_SwapDeltaCostComponent1::PrintViolations(const TSP_State& st, ostream& 
           
 int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP_Swap& sw) const
 {
-  //int cost = 0;
+  int cost = 0;
   // Insert the code that computes the delta cost of component 1 for move mv in state st
-	unsigned i;
+	/* unsigned i;
   int delta_violations = 0;
   for (i = 0; i < st.getInput().get_num_nodes()-1; i++)
-    {
-       delta_violations+= st.getInput().get_arc_cost(st[i], st[i+1]);
-
-    }
-  return delta_violations;
+  {
+    delta_violations+= st.getInput().get_arc_cost(st[i], st[i+1]);
+  }
+  return delta_violations; */
+  
+  // A -> b -> c -> D -> e -> f -> A
+  // swap <0, 3> (A with D)
+  // D -> b -> c -> A -> e -> f -> D
+  // check whether the new arcs modify the violations (adding/removing arcs with cost 0)
+  int a = sw.p1;
+  int d = sw.p2;
+  int n = st.getInput().get_num_nodes();
+  int b = (a + 1 < n  ? a + 1 : 0);
+  int f = (a - 1 >= 0 ? a - 1 : n - 1);
+  int c = (d - 1 >= 0 ? d - 1 : n - 1);
+  int e = (d + 1 < n  ? d + 1 : 0);
+  
+  if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) == 0) // was already violated
+    if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) != 0) // after swap, won't violate
+      cost--;  // then decrease cost
+  if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) != 0) // not already violated
+    if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) == 0) // after swap, will violate
+      cost++;  // then increase cost
+  
+  if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) == 0)
+    if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) != 0)
+      cost--;
+  if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) != 0)
+    if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) == 0)
+      cost++;
+  
+  if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) == 0)
+    if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) != 0)
+      cost--;
+  if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) != 0)
+    if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) == 0)
+      cost++;
+  
+  if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) == 0)
+    if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) != 0)
+      cost--;
+  if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) != 0)
+    if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) == 0)
+      cost++;
+  
+  
+  
+  return cost;
 }
 
 
@@ -189,11 +232,44 @@ void TSP_SwapDeltaCostComponent2::PrintViolations(const TSP_State& st, ostream& 
 {
  
 }
-          
+
 int TSP_SwapDeltaCostComponent2::ComputeDeltaCost(const TSP_State& st, const TSP_Swap& sw) const
 {
   int cost = 0;
-  // Insert the code that computes the delta cost of component 1 for move mv in state st
+  // Insert the code that computes the delta cost of component 2 for move mv in state st
+  // A -> b -> c -> D -> e -> f -> A
+  // swap <0, 3> (A with D)
+  // D -> b -> c -> A -> e -> f -> D
+  // removed costs: A -> b, f -> A, c -> D, D -> e
+  // added costs:   D -> b, f -> D, c -> A, A -> e
+  int a = sw.p1;
+  int d = sw.p2;
+  int n = st.getInput().get_num_nodes();
+  int b = (a + 1 < n  ? a + 1 : 0);
+  int f = (a - 1 >= 0 ? a - 1 : n - 1);
+  int c = (d - 1 >= 0 ? d - 1 : n - 1);
+  int e = (d + 1 < n  ? d + 1 : 0);
+  
+  if (abs(a - b) > 1)
+    cost = cost
+      - st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b))
+      - st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a))
+      - st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d))
+      - st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e))
+      + st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b))
+      + st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d))
+      + st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a))
+      + st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e));
+  else // A -> D -> e -> ... -> f -> A
+    cost = cost
+      - st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d))
+      - st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a))
+      - st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e))
+      + st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e))
+      + st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d))
+      + st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a));
+      
+    
   return cost;
 }
 
