@@ -33,11 +33,11 @@ int main(int argc, const char* argv[])
     Random::Seed(seed);
   
   // cost components: second parameter is the cost, third is the type (true -> hard, false -> soft)
-  TSP_CostComponent1 cc1(in, 1, true);
-  //TSP_CostComponent2 cc2(in, 1, true);
+  TSP_CostComponent1 cc1(in, 1, true); // missing arc?
+  TSP_CostComponent2 cc2(in, 1, false); // arc cost?
 
   TSP_SwapDeltaCostComponent1 dcc1(in, cc1);
-  //TSP_SwapDeltaCostComponent2 dcc2(in, cc2);
+  TSP_SwapDeltaCostComponent2 dcc2(in, cc2);
 
   // helpers
   TSP_StateManager TSP_sm(in);
@@ -47,11 +47,11 @@ int main(int argc, const char* argv[])
   
   // All cost components must be added to the state manager
   TSP_sm.AddCostComponent(cc1);
- // TSP_sm.AddCostComponent(cc2);
+  TSP_sm.AddCostComponent(cc2);
   
   // All delta cost components must be added to the neighborhood explorer
   TSP_nhe.AddDeltaCostComponent(dcc1);
-  //TSP_nhe.AddDeltaCostComponent(dcc2);
+  TSP_nhe.AddDeltaCostComponent(dcc2);
   
   // runners
   HillClimbing<TSP_Input, TSP_State, TSP_Swap> TSP_hc(in, TSP_sm, TSP_nhe, "TSP_SwapHillClimbing");

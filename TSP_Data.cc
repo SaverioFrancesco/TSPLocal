@@ -50,7 +50,7 @@ TSP_Output::TSP_Output(const TSP_Input& my_in)
   // Insert the code that initialize the data structures of the
   // output object based in the input object
 
-  unsigned u=my_in.get_num_nodes();
+  unsigned u=in.get_num_nodes();
   tcp_path.resize(u);
 
   for (unsigned i = 0; i < u; ++i)
@@ -87,7 +87,7 @@ std::ostream& operator << (std::ostream& os, const std::vector<T>& v)
 
 ostream& operator<<(ostream& os, const TSP_Output& out)
 { 
- // Insert the code that writes the output object
+  // Insert the code that writes the output object
   //
   
   os << out.tcp_path ;

@@ -6,7 +6,14 @@ int TSP_CostComponent1::ComputeCost(const TSP_State& st) const
   unsigned cost = 0;
   // Insert the code that computes the cost for component 1 
   // of state st
-	throw logic_error("TSP_CostComponent1::ComputeCost not implemented yet");	
+  unsigned i;
+  for (i = 0; i < st.getInput().get_num_nodes() - 1; i++)
+    if (st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(i+1)) == 0)
+      cost++;
+    
+  if (st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(0)) == 0)
+    cost++;
+  //throw logic_error("TSP_CostComponent1::ComputeCost not implemented yet");	
   return cost;
 }
           
@@ -14,7 +21,14 @@ void TSP_CostComponent1::PrintViolations(const TSP_State& st, ostream& os) const
 {
   // Insert the code that prints the violations of component 1 
   // of state st
-	throw logic_error("TSP_CostComponent1::PrintViolations not implemented yet");	
+  unsigned i;
+  for (i = 0; i < st.getInput().get_num_nodes() - 1; i++)
+    if (st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(i+1)) == 0)
+      cout << "Arc between " << st.get_positions(i) << " and " << st.get_positions(i+1) << " does not exist" << endl;
+    
+  if (st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(0)) == 0)
+    cout << "Arc between " << st.get_positions(i) << " and " << st.get_positions(0) << " does not exist" << endl;
+	//throw logic_error("TSP_CostComponent1::PrintViolations not implemented yet");	
 }
 
 int TSP_CostComponent2::ComputeCost(const TSP_State& st) const
@@ -22,7 +36,11 @@ int TSP_CostComponent2::ComputeCost(const TSP_State& st) const
   unsigned cost = 0;
   // Insert the code that computes the cost for component 2
   // of state st
-	throw logic_error("TSP_CostComponent2::ComputeCost not implemented yet");	
+  unsigned i;
+  for (i = 0; i < st.getInput().get_num_nodes() - 1; i++)
+    cost = cost + st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(i+1));
+  cost = cost + st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(0));
+	
   return cost;
 }
  
@@ -162,7 +180,20 @@ int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP
     {
        delta_violations+= st.getInput().get_arc_cost(st[i], st[i+1]);
 
-   }
+    }
   return delta_violations;
+}
+
+
+void TSP_SwapDeltaCostComponent2::PrintViolations(const TSP_State& st, ostream& os) const
+{
+ 
+}
+          
+int TSP_SwapDeltaCostComponent2::ComputeDeltaCost(const TSP_State& st, const TSP_Swap& sw) const
+{
+  int cost = 0;
+  // Insert the code that computes the delta cost of component 1 for move mv in state st
+  return cost;
 }
 
