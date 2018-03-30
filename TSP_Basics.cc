@@ -38,8 +38,8 @@ ostream& operator<<(ostream& os, const TSP_State& st)
 {
   // Insert the code that writes the state object (for debugging)
   unsigned i;
-  for (i = 0; i < st.in.get_num_nodes(); i++)
-    os << st[i] << " ";
+  for (i = 0; i < st.in.get_num_nodes() -1; i++)
+    os << st[i] << " -(" <<  st.getInput().get_arc_cost(st[i], st[i+1]) << ")-> " << st[i+1]<< endl;
   return os;
 }
 

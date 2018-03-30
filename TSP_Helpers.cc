@@ -167,7 +167,12 @@ bool TSP_SwapNeighborhoodExplorer::NextMove(const TSP_State& st, TSP_Swap& sw) c
 
 void TSP_SwapDeltaCostComponent1::PrintViolations(const TSP_State& st, ostream& os) const
 {
- 
+    for (unsigned i = 0; i < st.getInput().get_num_nodes()-1; i++)
+    {
+       if(st.getInput().get_arc_cost(st[i], st[i+1])){
+          cout<< "Path traversing missing arch ==> (" <<st[i] << ", " << st[i+1] <<")\n";
+       }
+    }
 }
           
 int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP_Swap& sw) const
