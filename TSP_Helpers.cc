@@ -28,7 +28,7 @@ void TSP_CostComponent1::PrintViolations(const TSP_State& st, ostream& os) const
     
   if (st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(0)) == 0)
     cout << "Arc between " << st.get_positions(i) << " and " << st.get_positions(0) << " does not exist" << endl;
-	//throw logic_error("TSP_CostComponent1::PrintViolations not implemented yet");	
+	
 }
 
 int TSP_CostComponent2::ComputeCost(const TSP_State& st) const
@@ -48,7 +48,11 @@ void TSP_CostComponent2::PrintViolations(const TSP_State& st, ostream& os) const
 {
   // Insert the code that prints the violations of component 1 
   // of state st
-	throw logic_error("TSP_CostComponent2::PrintViolations not implemented yet");	
+	unsigned i;
+  for (i = 0; i < st.getInput().get_num_nodes() - 1; i++)
+    cout << "Arc between " << st.get_positions(i) << " and " << st.get_positions(i+1) << " costs " << st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(i+1)) << endl;
+    
+  cout << "Arc between " << st.get_positions(i) << " and " << st.get_positions(0) << " costs " << st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(0)) << endl;
 }
 
 // constructor
@@ -151,42 +155,35 @@ bool TSP_SwapNeighborhoodExplorer::NextMove(const TSP_State& st, TSP_Swap& sw) c
   // Insert the code that generate the move that follows mv in the neighborhood, and writes
   // it back in mv. Return false if mv is already the last move. 
 	if (sw.p2 < st.getInput().get_num_nodes() - 1) 
-      {
-      sw.p2++;
-      return true;
-      }
-    else if (sw.p1 < st.getInput().get_num_nodes() - 2)
-      { 
-      sw.p1++; 
-      sw.p2 = sw.p1 + 1; 
-      return true;
-      }
-    else
-      return false;
+  {
+    sw.p2++;
+    return true;
+  }
+  else if (sw.p1 < st.getInput().get_num_nodes() - 2)
+  { 
+    sw.p1++; 
+    sw.p2 = sw.p1 + 1; 
+    return true;
+  }
+  else
+    return false;
 }
 
 void TSP_SwapDeltaCostComponent1::PrintViolations(const TSP_State& st, ostream& os) const
 {
-    for (unsigned i = 0; i < st.getInput().get_num_nodes()-1; i++)
+  for (unsigned i = 0; i < st.getInput().get_num_nodes()-1; i++)
+  {
+    if(st.getInput().get_arc_cost(st[i], st[i+1]))
     {
-       if(st.getInput().get_arc_cost(st[i], st[i+1])){
-          os<< "Path traversing missing arch ==> (" <<st[i] << ", " << st[i+1] <<")" << endl;
-       }
+      os << "Path traversing missing arch ==> (" << st[i] << ", " << st[i+1] << ")" << endl;
     }
+  }
 }
           
 int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP_Swap& sw) const
 {
   int cost = 0;
   // Insert the code that computes the delta cost of component 1 for move mv in state st
-	/* unsigned i;
-  int delta_violations = 0;
-  for (i = 0; i < st.getInput().get_num_nodes()-1; i++)
-  {
-    delta_violations+= st.getInput().get_arc_cost(st[i], st[i+1]);
-  }
-  return delta_violations; */
-  
   // A -> b -> c -> D -> e -> f -> A
   // swap <0, 3> (A with D)
   // D -> b -> c -> A -> e -> f -> D
@@ -282,7 +279,11 @@ int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP
 
 void TSP_SwapDeltaCostComponent2::PrintViolations(const TSP_State& st, ostream& os) const
 {
- 
+  unsigned i;
+  for (i = 0; i < st.getInput().get_num_nodes() - 1; i++)
+    cout << "Arc between " << st.get_positions(i) << " and " << st.get_positions(i+1) << " costs " << st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(i+1)) << endl;
+    
+  cout << "Arc between " << st.get_positions(i) << " and " << st.get_positions(0) << " costs " << st.getInput().get_arc_cost(st.get_positions(i), st.get_positions(0)) << endl;
 }
 
 int TSP_SwapDeltaCostComponent2::ComputeDeltaCost(const TSP_State& st, const TSP_Swap& sw) const
