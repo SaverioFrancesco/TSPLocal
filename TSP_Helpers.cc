@@ -198,36 +198,83 @@ int TSP_SwapDeltaCostComponent1::ComputeDeltaCost(const TSP_State& st, const TSP
   int f = (a - 1 >= 0 ? a - 1 : n - 1);
   int c = (d - 1 >= 0 ? d - 1 : n - 1);
   int e = (d + 1 < n  ? d + 1 : 0);
-  
-  if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) == 0) // was already violated
-    if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) != 0) // after swap, won't violate
-      cost--;  // then decrease cost
-  if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) != 0) // not already violated
-    if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) == 0) // after swap, will violate
-      cost++;  // then increase cost
-  
-  if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) == 0)
-    if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) != 0)
-      cost--;
-  if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) != 0)
-    if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) == 0)
-      cost++;
-  
-  if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) == 0)
-    if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) != 0)
-      cost--;
-  if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) != 0)
-    if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) == 0)
-      cost++;
-  
-  if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) == 0)
-    if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) != 0)
-      cost--;
-  if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) != 0)
-    if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) == 0)
-      cost++;
-  
-  
+  if (a == 0 && d == n - 1) // before move: A -> b -> ... -> c -> D (thus D -> A)
+  {
+    if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) == 0) // was already violated
+      if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) != 0) // after swap, won't violate
+        cost--;  // then decrease cost
+    if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) != 0) // not already violated
+      if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) == 0) // after swap, will violate
+        cost++;  // then increase cost
+    
+    if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a)) == 0) // was already violated
+      if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d)) != 0) // after swap, won't violate
+        cost--;  // then decrease cost
+    if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a)) != 0) // not already violated
+      if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d)) == 0) // after swap, will violate
+        cost++;  // then increase cost
+    
+    if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) == 0) // was already violated
+      if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) != 0) // after swap, won't violate
+        cost--;  // then decrease cost
+    if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) != 0) // not already violated
+      if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) == 0) // after swap, will violate
+        cost++;  // then increase cost
+  }
+  else
+    if (d == a + 1) // before move: ... -> f -> A -> D -> e -> ...
+    {
+      if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) == 0) // was already violated
+        if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) != 0) // after swap, won't violate
+          cost--;  // then decrease cost
+      if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) != 0) // not already violated
+        if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) == 0) // after swap, will violate
+          cost++;  // then increase cost
+      
+      if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d)) == 0) // was already violated
+        if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a)) != 0) // after swap, won't violate
+          cost--;  // then decrease cost
+      if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d)) != 0) // not already violated
+        if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a)) == 0) // after swap, will violate
+          cost++;  // then increase cost
+      
+      if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) == 0) // was already violated
+        if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) != 0) // after swap, won't violate
+          cost--;  // then decrease cost
+      if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) != 0) // not already violated
+        if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) == 0) // after swap, will violate
+          cost++;  // then increase cost
+    }
+    else
+    {
+      if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) == 0) // was already violated
+        if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) != 0) // after swap, won't violate
+          cost--;  // then decrease cost
+      if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b)) != 0) // not already violated
+        if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b)) == 0) // after swap, will violate
+          cost++;  // then increase cost
+      
+      if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) == 0)
+        if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) != 0)
+          cost--;
+      if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a)) != 0)
+        if (st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d)) == 0)
+          cost++;
+      
+      if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) == 0)
+        if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) != 0)
+          cost--;
+      if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d)) != 0)
+        if (st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a)) == 0)
+          cost++;
+      
+      if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) == 0)
+        if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) != 0)
+          cost--;
+      if (st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e)) != 0)
+        if (st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e)) == 0)
+          cost++;
+    }
   
   return cost;
 }
@@ -255,25 +302,35 @@ int TSP_SwapDeltaCostComponent2::ComputeDeltaCost(const TSP_State& st, const TSP
   int c = (d - 1 >= 0 ? d - 1 : n - 1);
   int e = (d + 1 < n  ? d + 1 : 0);
   
-  if (abs(a - b) > 1)
+  if (a == 0 && d == n - 1)
+    // before move: A -> b -> ... -> c -> D (thus D -> A)
     cost = cost
       - st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b))
-      - st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a))
+      - st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a))
       - st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d))
-      - st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e))
       + st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b))
-      + st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d))
-      + st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a))
-      + st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e));
-  else // A -> D -> e -> ... -> f -> A
-    cost = cost
-      - st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d))
-      - st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a))
-      - st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e))
-      + st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e))
-      + st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d))
-      + st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a));
-      
+      + st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d))
+      + st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a));
+  else 
+    if (d == a + 1)
+      // before move: A -> D -> e -> ... -> f -> A
+      cost = cost
+        - st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(d))
+        - st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a))
+        - st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e))
+        + st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e))
+        + st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d))
+        + st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(a));
+    else
+      cost = cost
+        - st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(b))
+        - st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(a))
+        - st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(d))
+        - st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(e))
+        + st.getInput().get_arc_cost(st.get_positions(d), st.get_positions(b))
+        + st.getInput().get_arc_cost(st.get_positions(f), st.get_positions(d))
+        + st.getInput().get_arc_cost(st.get_positions(c), st.get_positions(a))
+        + st.getInput().get_arc_cost(st.get_positions(a), st.get_positions(e));
     
   return cost;
 }
