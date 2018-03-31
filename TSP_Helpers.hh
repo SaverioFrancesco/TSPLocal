@@ -51,7 +51,7 @@ public:
     : DeltaCostComponent<TSP_Input,TSP_State,TSP_Swap>(in,cc,"TSP_SwapDeltaCostComponent1") 
   {}
   int ComputeDeltaCost(const TSP_State& st, const TSP_Swap& mv) const;
-  void PrintViolations(const TSP_State& st, ostream& os) const;
+  /* void PrintViolations(const TSP_State& st, ostream& os) const; */
 };
 
 class TSP_SwapDeltaCostComponent2
@@ -62,7 +62,7 @@ public:
     : DeltaCostComponent<TSP_Input,TSP_State,TSP_Swap>(in,cc,"TSP_SwapDeltaCostComponent2") 
   {}
   int ComputeDeltaCost(const TSP_State& st, const TSP_Swap& mv) const;
-  void PrintViolations(const TSP_State& st, ostream& os) const;
+  /* void PrintViolations(const TSP_State& st, ostream& os) const; */
 };
 
 class TSP_SwapNeighborhoodExplorer
